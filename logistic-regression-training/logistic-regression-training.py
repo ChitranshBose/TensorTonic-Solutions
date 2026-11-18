@@ -1,0 +1,25 @@
+import numpy as np
+
+def _sigmoid(z: np.ndarray) -> np.ndarray:
+    """
+    Returns elementwise sigmoid values.
+    """
+    return np.where(z >= 0, 1/(1+np.exp(-z)), np.exp(z)/(1+np.exp(z)))
+
+def train_logistic_regression(X: np.ndarray, y: np.ndarray, lr: float = 0.1, steps: int = 1000) -> tuple[np.ndarray, float]:
+    """
+    Returns the trained weights and bias as (w, b).
+    """
+    # Write code here
+    sample_size, features = X.shape
+    w = np.zeros(features)
+    b = 0.0
+    for _ in range(steps):
+        z = np.dot(X,w) + b
+        p = _sigmoid(z)
+        dw = np.dot(X.T, (p-y))/sample_size
+        db =  np.mean(p-y)
+        w = w-lr*dw
+        b = b-lr*db
+    return w, b
+    
